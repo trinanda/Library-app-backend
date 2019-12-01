@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
+    database: process.env.DB_NAME
 })
 module.exports = connection
 
@@ -31,6 +31,15 @@ app.get('/', (req, res) => {
 
 app.get('/categories', (req, res) => {
     connection.query('SELECT DISTINCT category from contact', (err, result) => {
+        if (req) console.log(err)
+        res.send(result);
+    })
+})
+
+// TODO | InsyaAllah will continuing working in the route bellow
+app.get('/categories/:category', (req, res) => {
+    const category = req.params.category
+    connection.query('SELECT * FROM contact WHERE contact.category = ?', category, (err, result) => {
         if (req) console.log(err)
         res.send(result);
     })
